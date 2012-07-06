@@ -1,0 +1,42 @@
+TODO
+
+[DONE]
+x add statictext areas for display [7/5]
+x key bindings as well as buttons [7/6]
+x game logic added and working [7/6]
+/ menu (added, needs populating) [7/5]
+	> open config dialog
+	> display colored grid/chart (non-modal, resizable?)
+
+
+[NEXT]
+- enlarge size of window? resizable?
+- filter which keys are allowed (lookup EVT_CHAR_HOOK)
+- choose hand type (radio buttons/checkboxes? cfg file?)
+- multiple YML files (h/s 17's)
+- right/wrong message (statusbar?)
+- flash buttons red/green for right/wrong
+- timer for card appearances?
+- boss key (display new panel?)
+	> un-boss
+	> immediate quit
+- wx Table/grid display to show YML file
+- config file
+	> immediate redeal on/off (space otherwise?)
+	> dlr stands on hard or soft 17s (see below)
+	> text or img version
+		> multiple card sets/backs
+	> background color (wx.ColorPicker or whatever)
+	> buttons/keys/both
+	> choose boss key 
+	> text-version font
+
+
+[BIG]
+- stat tracking
+- statusbar shows % right for session & history
+
+
+[HUGE]
+- image handling/slicing (CardCutter)
+- img buttons instead of system? (or button style)
