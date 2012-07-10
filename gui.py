@@ -23,11 +23,14 @@ class MainFrame(wx.Frame):
 		
 #		super (MainFrame, self).__init__(parent, id, title, pos, size, style, name)
 		
+#		self.SetAutoLayout(True)
 		
 		# Attributes
 		panel = self.panel = wx.Panel(self)
 		panel.SetBackgroundColour(wx.WHITE)
 		
+		bpanel = self.bpanel = wx.Panel(self)
+		bpanel.Hide()
 		
 		self.m_menubar1 = wx.MenuBar( 0 )
 		self.f_menu = wx.Menu()
@@ -43,8 +46,8 @@ class MainFrame(wx.Frame):
 				
 		# downcard = self.downcard = wx.StaticText(panel, -1, "XX")
 		dcard = self.dcard = wx.StaticText(panel, -1, "XX")
-		pcard1 = self.pcard1 = wx.StaticText(panel, -1, "XX")
-		pcard2 = self.pcard2 = wx.StaticText(panel, -1, "XX")
+		pcard1 = self.pcard1 = wx.StaticText(panel, -1, "XX", style = wx.ALIGN_CENTER)
+		pcard2 = self.pcard2 = wx.StaticText(panel, -1, "XX", style = wx.ALIGN_CENTER)
 		
 		hit_button = self.hit_button = wx.Button(panel, BTN_HIT, "H")
 		std_button = self.std_button = wx.Button(panel, BTN_STD, "S")
@@ -61,27 +64,29 @@ class MainFrame(wx.Frame):
 		gbs.Add(pcard1, (1,0), flag = wx.ALIGN_CENTER)
 		gbs.Add(pcard2, (1,1), flag = wx.ALIGN_CENTER)
 		
-		gbs.Add(hit_button, (2,0))
-		gbs.Add(std_button, (2,1))
-		gbs.Add(dbl_button, (3,0))
-		gbs.Add(spt_button, (3,1))
+		button_box = wx.BoxSizer()
+		button_box.SetMinSize(wx.Size(400,100))
+				
+		button_box.Add(hit_button, 1)
+		button_box.Add(std_button, 1)
+		button_box.Add(dbl_button, 1)
+		button_box.Add(spt_button, 0)
 		
-		
-		
+		gbs.Add(button_box, (3,0), (1,2), flag = wx.ALIGN_CENTER, border = 5)
+
 		box = wx.BoxSizer()
-		box.Add(gbs, 0, wx.ALL, 10)
-		
+		box.Add(gbs, 1, wx.ALL, 10)
+			
+			
 		panel.SetSizerAndFit(box)
+		
+		# For now, use the size of the box and not the box itself
+		# (perhaps there's an issue with reusing a sizer?)
+		bpanel.SetSize(box.GetSize())
+		
 		self.SetClientSize(panel.GetSize())
 		
-		
-		
-		panel.SetFocus()
-
-		logging.debug("Frame is top level? %s" % self.IsTopLevel())
-#		
-		
-		# Keyboard binding
+				# Keyboard binding
 		self.Bind(wx.EVT_CHAR_HOOK, self.keypress)
 		
 		# Button bindings
@@ -91,13 +96,6 @@ class MainFrame(wx.Frame):
 		self.Bind(wx.EVT_BUTTON, self.OnButton, spt_button)
 		
 		def OnButton(self, event):
-			event.Skip()
-		
-		def OnHit(self, event):
-			logging.debug("OnHit in gui")
-			event.Skip()
-			
-		def OnStand(self, event):
 			event.Skip()
 		
 		def OnKey(self, event):

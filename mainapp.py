@@ -32,7 +32,17 @@ class mf(gui.MainFrame):
 		keycode = event.GetKeyCode()
 		if keycode <= 256:
 			key = chr(keycode)
-			self.CheckPlay(key)
+			
+			if key != "Q":
+				self.CheckPlay(key)
+			else:
+				# Boss-key toggle!			
+				if self.panel.IsShown():
+					self.panel.Hide()
+					self.bpanel.Show()
+				else:
+					self.panel.Show()
+					self.bpanel.Hide()
 
 
 
@@ -52,8 +62,9 @@ class mf(gui.MainFrame):
 		
 		
 	def CheckPlay(self, play):
+		logging.debug("Button: %s" % play)
 		if play == self.correct:
-			print "Right"
+			print "Right."
 		else:
 			print "Wrong."
 		
