@@ -33,16 +33,18 @@ class mf(gui.MainFrame):
 		if keycode <= 256:
 			key = chr(keycode)
 			
-			if key != "Q":
-				self.CheckPlay(key)
-			else:
-				# Boss-key toggle!			
-				if self.panel.IsShown():
-					self.panel.Hide()
-					self.bpanel.Show()
-				else:
-					self.panel.Show()
-					self.bpanel.Hide()
+#			if key != "Q":
+#				self.CheckPlay(key)
+#			else:
+#				self.gbs.Hide(self)
+#				self.gbs.Layout(self)
+#				# Boss-key toggle!			
+##				if self.panel.IsShown():
+##					self.panel.Hide()
+##					self.bpanel.Show()
+##				else:
+##					self.panel.Show()
+##					self.bpanel.Hide()
 
 
 

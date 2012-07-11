@@ -15,76 +15,108 @@ BTN_DBL = 3000
 BTN_SPT = 4000
 	
 class MainFrame(wx.Frame):
-	def __init__ (self, parent, id = wx.ID_ANY, title = "Trainer",
-					pos=wx.DefaultPosition, size=wx.DefaultSize,
-					style=wx.DEFAULT_FRAME_STYLE, name = "My Frame"):
+	def __init__ (self, parent):
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = "wxTrainer 0.2b", 
+						pos = wx.DefaultPosition, size = wx.Size(400,250), 
+						style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 		
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 620,406 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		#self.SetSizeHintsSz(wx.Size(400,200), wx.Size(500,500))
 		
-#		super (MainFrame, self).__init__(parent, id, title, pos, size, style, name)
+
 		
-#		self.SetAutoLayout(True)
-		
-		# Attributes
+		# Panels
 		panel = self.panel = wx.Panel(self)
 		panel.SetBackgroundColour(wx.WHITE)
+		#panel.SetSizeHintsSz(wx.Size(400,200), wx.Size(500,500))
 		
 		bpanel = self.bpanel = wx.Panel(self)
 		bpanel.Hide()
 		
+		
+		# Menus
 		self.m_menubar1 = wx.MenuBar( 0 )
 		self.f_menu = wx.Menu()
 		self.m_menuItem1 = wx.MenuItem( self.f_menu, wx.ID_ANY, u"Config", wx.EmptyString, wx.ITEM_NORMAL )
 		self.f_menu.AppendItem( self.m_menuItem1 )
-		
 		self.m_menubar1.Append( self.f_menu, u"File" ) 
-		
 		self.SetMenuBar( self.m_menubar1 )
 
-		# Attempt to hack up a gridbagsizer
-		gbs = self.gbs = wx.GridBagSizer(5,5)
 				
-		# downcard = self.downcard = wx.StaticText(panel, -1, "XX")
-		dcard = self.dcard = wx.StaticText(panel, -1, "XX")
-		pcard1 = self.pcard1 = wx.StaticText(panel, -1, "XX", style = wx.ALIGN_CENTER)
-		pcard2 = self.pcard2 = wx.StaticText(panel, -1, "XX", style = wx.ALIGN_CENTER)
+		# Text labels 
+		dcard = self.dcard = wx.StaticText(self, -1, "XX", style = wx.ALIGN_CENTER)
+		pcard1 = self.pcard1 = wx.StaticText(self, -1, "XX", style = wx.ALIGN_CENTER)
+		pcard2 = self.pcard2 = wx.StaticText(self, -1, "XX", style = wx.ALIGN_CENTER)
 		
-		hit_button = self.hit_button = wx.Button(panel, BTN_HIT, "H")
-		std_button = self.std_button = wx.Button(panel, BTN_STD, "S")
-		dbl_button = self.dbl_button = wx.Button(panel, BTN_DBL, "D")
-		spt_button = self.spt_button = wx.Button(panel, BTN_SPT, "P")
+		hit_button = self.hit_button = wx.Button(self, BTN_HIT, "H", wx.DefaultPosition, wx.DefaultSize, 0)
+		std_button = self.std_button = wx.Button(self, BTN_STD, "S")
+		dbl_button = self.dbl_button = wx.Button(self, BTN_DBL, "D")
+		spt_button = self.spt_button = wx.Button(self, BTN_SPT, "P")
 		
+
+		# GridBagSizer
+		gbs = self.gbs = wx.GridBagSizer(5,5)
+		
+		# Make all columns & rows growable (stretchable)
+#		gbs.AddGrowableCol(0)
+#		gbs.AddGrowableCol(1)
+#		gbs.AddGrowableCol(2)
+#		gbs.AddGrowableCol(3)
+#		gbs.AddGrowableCol(4)
+#		gbs.AddGrowableRow(0)
+#		gbs.AddGrowableRow(1)
+#		gbs.AddGrowableRow(2)
+#		gbs.AddGrowableRow(3)
+#		gbs.AddGrowableRow(4)
 		
 		# gbs coordinates are row, column
 		# spanning value is how many rows and how many columns - 
-		# 	NOT a to->from range
+		# 	NOT a to->from range	
+		gbs.Add(dcard, wx.GBPosition(0,0), wx.GBSpan(1,4), flag = wx.ALIGN_CENTER | wx.ALL, border=5)
+		gbs.Add(pcard1, wx.GBPosition(1,0), wx.GBSpan(1,2), flag = wx.ALIGN_CENTER | wx.ALL, border=5)
+		gbs.Add(pcard2, wx.GBPosition(1,2), wx.GBSpan(1,2), flag = wx.ALIGN_CENTER | wx.ALL, border=5)
 		
-		gbs.Add(dcard, (0,0), (1,2), flag = wx.ALIGN_CENTER, border=5)
-		#gbs.Add(downcard, (0,1))
-		gbs.Add(pcard1, (1,0), flag = wx.ALIGN_CENTER)
-		gbs.Add(pcard2, (1,1), flag = wx.ALIGN_CENTER)
-		
-		button_box = wx.BoxSizer()
-		button_box.SetMinSize(wx.Size(400,100))
-				
-		button_box.Add(hit_button, 1)
-		button_box.Add(std_button, 1)
-		button_box.Add(dbl_button, 1)
-		button_box.Add(spt_button, 0)
-		
-		gbs.Add(button_box, (3,0), (1,2), flag = wx.ALIGN_CENTER, border = 5)
+		gbs.Add(hit_button, wx.GBPosition(2,0), wx.GBSpan(1,1), wx.ALL, 5)
+		gbs.Add(std_button, wx.GBPosition(2,1), wx.GBSpan(1,1), wx.ALL, 5)
+		gbs.Add(dbl_button, wx.GBPosition(2,2), wx.GBSpan(1,1), wx.ALL, 5)
+		gbs.Add(spt_button, wx.GBPosition(2,3), wx.GBSpan(1,1), wx.ALL, 5)
+#		
+#		button_box = wx.BoxSizer()
+#		button_box.SetMinSize(wx.Size(400,100))
+#				
+#		button_box.Add(hit_button, 1)
+#		button_box.Add(std_button, 1)
+#		button_box.Add(dbl_button, 1)
+#		button_box.Add(spt_button, 0)
+#		
+#		gbs.Add(button_box, (3,0), (1,2), flag = wx.ALIGN_CENTER, border = 5)
 
-		box = wx.BoxSizer()
-		box.Add(gbs, 1, wx.ALL, 10)
+		gbs.AddGrowableCol(0)
+		gbs.AddGrowableCol(1)
+		gbs.AddGrowableCol(2)
+		gbs.AddGrowableCol(3)
+##		gbs.AddGrowableCol(4)
+		gbs.AddGrowableRow(0)
+		gbs.AddGrowableRow(1)
+		gbs.AddGrowableRow(2)
+#		gbs.AddGrowableRow(3)
+##		gbs.AddGrowableRow(4)
+
+		#box = wx.BoxSizer()
+		#box.Add(gbs, 1, wx.ALL, 10)
 			
+		#panel.Layout()
 			
-		panel.SetSizerAndFit(box)
-		
+		self.SetSizerAndFit(gbs)
+		#panel.SetSize(gbs.GetSize())
+
+#		panel.SetSizer(gbs)
+#		panel.Layout()
+#		
 		# For now, use the size of the box and not the box itself
 		# (perhaps there's an issue with reusing a sizer?)
-		bpanel.SetSize(box.GetSize())
-		
-		self.SetClientSize(panel.GetSize())
+#		bpanel.SetSize(box.GetSize())
+#		
+#		self.SetClientSize(panel.GetSize())
 		
 				# Keyboard binding
 		self.Bind(wx.EVT_CHAR_HOOK, self.keypress)
