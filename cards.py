@@ -6,7 +6,6 @@ Created on Jun 14, 2012
 import random
 import logging
 
-logging.basicConfig(level = logging.DEBUG)
 
 # Let's define a few globals to make life easier...
 

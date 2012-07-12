@@ -8,13 +8,15 @@ import gui
 import cards
 import strategy
 
+import logging
+logging.basicConfig(level = logging.INFO)
+
+
+# Yeah... this sucks. There must be a better way of handling buttons
 play_ids = dict({1000: "H", 2000: "S", 3000: "D", 4000: "S"})
 
 
 chart = strategy.table()
-
-import logging
-logging.basicConfig(level = logging.WARNING)
 
 class mf(gui.MainFrame):
 	def __init__(self, parent ):
@@ -33,20 +35,10 @@ class mf(gui.MainFrame):
 		if keycode <= 256:
 			key = chr(keycode)
 			
-#			if key != "Q":
-#				self.CheckPlay(key)
-#			else:
-#				self.gbs.Hide(self)
-#				self.gbs.Layout(self)
-#				# Boss-key toggle!			
-##				if self.panel.IsShown():
-##					self.panel.Hide()
-##					self.bpanel.Show()
-##				else:
-##					self.panel.Show()
-##					self.bpanel.Hide()
-
-
+			if key != "Q":
+				self.CheckPlay(key)
+			else:
+				self.SwapView()
 
 	def deal(self):
 		h = cards.playerhand()
@@ -64,7 +56,7 @@ class mf(gui.MainFrame):
 		
 		
 	def CheckPlay(self, play):
-		logging.debug("Button: %s" % play)
+		logging.info("Button: %s" % play)
 		if play == self.correct:
 			print "Right."
 		else:

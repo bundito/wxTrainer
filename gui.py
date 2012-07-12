@@ -5,10 +5,13 @@ Created on Jun 20, 2012
 '''
 
 import wx
+import wx.grid as gridlib
 
 import logging
-logging.basicConfig(level = logging.DEBUG)
 
+
+
+# Global vars for button ID's (still useful?)
 BTN_HIT = 1000
 BTN_STD = 2000
 BTN_DBL = 3000
@@ -17,21 +20,21 @@ BTN_SPT = 4000
 class MainFrame(wx.Frame):
 	def __init__ (self, parent):
 		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = "wxTrainer 0.2b", 
-						pos = wx.DefaultPosition, size = wx.Size(400,250), 
-						style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+						pos = wx.DefaultPosition, size = wx.Size(450,550), 
+						style = (wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL) ^ (wx.RESIZE_BORDER | wx.MAXIMIZE_BOX))
 		
-		#self.SetSizeHintsSz(wx.Size(400,200), wx.Size(500,500))
+		#=======================================================================
+		# Make some panels
+		#=======================================================================
 		
-
-		
-		# Panels
+		# Main panel		
 		panel = self.panel = wx.Panel(self)
 		panel.SetBackgroundColour(wx.WHITE)
-		#panel.SetSizeHintsSz(wx.Size(400,200), wx.Size(500,500))
 		
-		bpanel = self.bpanel = wx.Panel(self)
-		bpanel.Hide()
-		
+		# Boss panel - in it's own class so it can be customized
+		bpanel = self.bpanel = BossPanel(self)
+		self.bpanel.Hide()
+
 		
 		# Menus
 		self.m_menubar1 = wx.MenuBar( 0 )
@@ -41,36 +44,30 @@ class MainFrame(wx.Frame):
 		self.m_menubar1.Append( self.f_menu, u"File" ) 
 		self.SetMenuBar( self.m_menubar1 )
 
+		#=======================================================================
+		# Add stuff to main panel
+		#=======================================================================
 				
 		# Text labels 
-		dcard = self.dcard = wx.StaticText(self, -1, "XX", style = wx.ALIGN_CENTER)
-		pcard1 = self.pcard1 = wx.StaticText(self, -1, "XX", style = wx.ALIGN_CENTER)
-		pcard2 = self.pcard2 = wx.StaticText(self, -1, "XX", style = wx.ALIGN_CENTER)
+		dcard = self.dcard = wx.StaticText(panel, -1, "XX", style = wx.ALIGN_CENTER)
+		pcard1 = self.pcard1 = wx.StaticText(panel, -1, "XX", style = wx.ALIGN_CENTER)
+		pcard2 = self.pcard2 = wx.StaticText(panel, -1, "XX", style = wx.ALIGN_CENTER)
 		
-		hit_button = self.hit_button = wx.Button(self, BTN_HIT, "H", wx.DefaultPosition, wx.DefaultSize, 0)
-		std_button = self.std_button = wx.Button(self, BTN_STD, "S")
-		dbl_button = self.dbl_button = wx.Button(self, BTN_DBL, "D")
-		spt_button = self.spt_button = wx.Button(self, BTN_SPT, "P")
+		# Buttons
+		hit_button = self.hit_button = wx.Button(panel, BTN_HIT, "H", wx.DefaultPosition, wx.DefaultSize, 0)
+		std_button = self.std_button = wx.Button(panel, BTN_STD, "S")
+		dbl_button = self.dbl_button = wx.Button(panel, BTN_DBL, "D")
+		spt_button = self.spt_button = wx.Button(panel, BTN_SPT, "P")
 		
+
+		#=======================================================================
+		# Build GridBagSizer for tidy layout
+		#=======================================================================
 
 		# GridBagSizer
 		gbs = self.gbs = wx.GridBagSizer(5,5)
 		
-		# Make all columns & rows growable (stretchable)
-#		gbs.AddGrowableCol(0)
-#		gbs.AddGrowableCol(1)
-#		gbs.AddGrowableCol(2)
-#		gbs.AddGrowableCol(3)
-#		gbs.AddGrowableCol(4)
-#		gbs.AddGrowableRow(0)
-#		gbs.AddGrowableRow(1)
-#		gbs.AddGrowableRow(2)
-#		gbs.AddGrowableRow(3)
-#		gbs.AddGrowableRow(4)
-		
-		# gbs coordinates are row, column
-		# spanning value is how many rows and how many columns - 
-		# 	NOT a to->from range	
+		# gbs coords are row, column - span is rowspan & colspan, not to/from 	
 		gbs.Add(dcard, wx.GBPosition(0,0), wx.GBSpan(1,4), flag = wx.ALIGN_CENTER | wx.ALL, border=5)
 		gbs.Add(pcard1, wx.GBPosition(1,0), wx.GBSpan(1,2), flag = wx.ALIGN_CENTER | wx.ALL, border=5)
 		gbs.Add(pcard2, wx.GBPosition(1,2), wx.GBSpan(1,2), flag = wx.ALIGN_CENTER | wx.ALL, border=5)
@@ -79,60 +76,93 @@ class MainFrame(wx.Frame):
 		gbs.Add(std_button, wx.GBPosition(2,1), wx.GBSpan(1,1), wx.ALL, 5)
 		gbs.Add(dbl_button, wx.GBPosition(2,2), wx.GBSpan(1,1), wx.ALL, 5)
 		gbs.Add(spt_button, wx.GBPosition(2,3), wx.GBSpan(1,1), wx.ALL, 5)
-#		
-#		button_box = wx.BoxSizer()
-#		button_box.SetMinSize(wx.Size(400,100))
-#				
-#		button_box.Add(hit_button, 1)
-#		button_box.Add(std_button, 1)
-#		button_box.Add(dbl_button, 1)
-#		button_box.Add(spt_button, 0)
-#		
-#		gbs.Add(button_box, (3,0), (1,2), flag = wx.ALIGN_CENTER, border = 5)
-
-		gbs.AddGrowableCol(0)
-		gbs.AddGrowableCol(1)
-		gbs.AddGrowableCol(2)
-		gbs.AddGrowableCol(3)
-##		gbs.AddGrowableCol(4)
-		gbs.AddGrowableRow(0)
-		gbs.AddGrowableRow(1)
-		gbs.AddGrowableRow(2)
-#		gbs.AddGrowableRow(3)
-##		gbs.AddGrowableRow(4)
-
-		#box = wx.BoxSizer()
-		#box.Add(gbs, 1, wx.ALL, 10)
 			
-		#panel.Layout()
-			
-		self.SetSizerAndFit(gbs)
-		#panel.SetSize(gbs.GetSize())
+		#=======================================================================
+		#  Finalize layout, set panel & frame sizes
+		#=======================================================================
 
-#		panel.SetSizer(gbs)
-#		panel.Layout()
-#		
-		# For now, use the size of the box and not the box itself
-		# (perhaps there's an issue with reusing a sizer?)
-#		bpanel.SetSize(box.GetSize())
-#		
-#		self.SetClientSize(panel.GetSize())
+		# Stuff everything into a nice, tidy box
+		box = wx.BoxSizer()
+		box.Add(gbs, 1, wx.ALL, 10)
 		
-				# Keyboard binding
+		# Assign the box to the panel
+		panel.SetSizerAndFit(box)
+			
+		# Use the box's size to size the second panel
+		bpanel.SetSize(box.GetSize())
+		
+		# Set the parent wx.Frame to be the same size as the panel
+		self.SetClientSize(panel.GetSize())
+		
+				
+		#===============================================================================
+		# Event bindings...
+		#===============================================================================
+				
+		# Keyboard
 		self.Bind(wx.EVT_CHAR_HOOK, self.keypress)
 		
-		# Button bindings
+		# Buttons
 		self.Bind(wx.EVT_BUTTON, self.OnButton, hit_button)
 		self.Bind(wx.EVT_BUTTON, self.OnButton, std_button)
 		self.Bind(wx.EVT_BUTTON, self.OnButton, dbl_button)
 		self.Bind(wx.EVT_BUTTON, self.OnButton, spt_button)
+		
+		
+		#=======================================================================
+		# Event handlers (currently [7/12] outsourced to mainapp.py)
+		#=======================================================================
 		
 		def OnButton(self, event):
 			event.Skip()
 		
 		def OnKey(self, event):
 			event.Skip()
+	
+	
+	#===========================================================================
+	# Object methods belong at THIS outdent level 
+	#===========================================================================
 			
+	def SwapView(self):
+		logging.info("Swapping...")
+		
+		bsize = wx.Size(700,400)
+		origsize = wx.Size(450,300)
+		
+		if self.panel.IsShown():
+			self.panel.Hide()
+			self.bpanel.SetSize(bsize)
+			self.bpanel.Show()
+			self.SetSize(bsize)
+		else:
+			self.panel.Show()
+			self.panel.SetSize(origsize)
+			self.SetSize(origsize)
+			self.bpanel.Hide()
+		
+
+
+#===============================================================================
+# BossPanel class - subclasses Panel, separated for ease of customizing
+#===============================================================================
+
+class BossPanel(wx.Panel):
+    """"""
+ 
+    #----------------------------------------------------------------------
+    def __init__(self, parent):
+        """Constructor"""
+        wx.Panel.__init__(self, parent=parent)
+ 
+        grid = gridlib.Grid(self)
+        grid.CreateGrid(25,12)
+ 
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(grid, 0, wx.EXPAND)
+        self.SetSizer(sizer)
+
+
 
 
 class TestDialog(wx.Dialog):
