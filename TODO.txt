@@ -5,6 +5,8 @@ x add statictext areas for display [7/5]
 x key bindings as well as buttons [7/6]
 x game logic added and working [7/6]
 x filter which keys are allowed (lookup EVT_CHAR_HOOK) [7/09 - must be in code]
+x fix gridbagsizer layout - way ugly
+x enlarge size of window? resizable?
 / menu (added, needs populating) [7/5]
 	> open config dialog
 	> display colored grid/chart (non-modal, resizable?)
@@ -15,11 +17,9 @@ x filter which keys are allowed (lookup EVT_CHAR_HOOK) [7/09 - must be in code]
 
 
 [NEXT]
-- fix gridbagsizer layout - way ugly
-- enlarge size of window? resizable?
+- right/wrong message (statusbar?)
 - choose hand type (radio buttons/checkboxes? cfg file?)
 - multiple YML files (h/s 17's)
-- right/wrong message (statusbar?)
 - flash buttons red/green for right/wrong
 - timer for card appearances?
 - wx Table/grid display to show YML file

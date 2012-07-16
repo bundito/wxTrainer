@@ -7,9 +7,15 @@ import wx
 import gui
 import cards
 import strategy
+import config as cfg
 
 import logging
 logging.basicConfig(level = logging.INFO)
+
+logging.info(cfg.message)
+cfg.read_cfg()
+logging.info(cfg.message)
+#cfg.add_cfg('test')
 
 
 # Yeah... this sucks. There must be a better way of handling buttons

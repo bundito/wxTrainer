@@ -35,14 +35,20 @@ class MainFrame(wx.Frame):
 		bpanel = self.bpanel = BossPanel(self)
 		self.bpanel.Hide()
 
+		# Configuration dialog
+		cfg_dialog = self.cfg_dialog = ConfigDialog(self)
 		
 		# Menus
-		self.m_menubar1 = wx.MenuBar( 0 )
-		self.f_menu = wx.Menu()
-		self.m_menuItem1 = wx.MenuItem( self.f_menu, wx.ID_ANY, u"Config", wx.EmptyString, wx.ITEM_NORMAL )
-		self.f_menu.AppendItem( self.m_menuItem1 )
-		self.m_menubar1.Append( self.f_menu, u"File" ) 
-		self.SetMenuBar( self.m_menubar1 )
+		self.mb = wx.MenuBar(0)
+		
+		# File Menu & Items
+		self.filemenu = wx.Menu()
+		self.mi_config = wx.MenuItem(self.filemenu, wx.ID_ANY, u"Config", wx.EmptyString, wx.ITEM_NORMAL)
+		self.filemenu.AppendItem(self.mi_config)
+		
+		# Build menu
+		self.mb.Append(self.filemenu, u"File") 
+		self.SetMenuBar(self.mb)
 
 		#=======================================================================
 		# Add stuff to main panel
@@ -108,9 +114,11 @@ class MainFrame(wx.Frame):
 		self.Bind(wx.EVT_BUTTON, self.OnButton, dbl_button)
 		self.Bind(wx.EVT_BUTTON, self.OnButton, spt_button)
 		
+		# Menus
+		self.Bind(wx.EVT_MENU, self.DoConfig, self.mi_config)
 		
 		#=======================================================================
-		# Event handlers (currently [7/12] outsourced to mainapp.py)
+		# Button & Key handlers (currently [7/12] outsourced to mainapp.py)
 		#=======================================================================
 		
 		def OnButton(self, event):
@@ -119,7 +127,24 @@ class MainFrame(wx.Frame):
 		def OnKey(self, event):
 			event.Skip()
 	
-	
+	#=======================================================================
+	# Menu handlers are (for now) handled internally by GUI
+	#=======================================================================
+
+	def DoConfig(self, event):
+		dlg = self.cfg_dialog
+		retval = dlg.ShowModal()
+		
+#		self.cfg_dialog.Hide()
+		if retval == wx.ID_OK:
+			logging.info("Ok")
+			type = dlg.type.GetValue()
+			logging.info(type)
+			
+		elif retval == wx.ID_CANCEL:
+			logging.info("Cancelled.")
+			
+			
 	#===========================================================================
 	# Object methods belong at THIS outdent level 
 	#===========================================================================
@@ -167,14 +192,15 @@ class BossPanel(wx.Panel):
 
 
 
-class TestDialog(wx.Dialog):
-	def __init__(self, parent, id = wx.ID_ANY, title = "Test", size=wx.DefaultSize, pos=wx.DefaultPosition, style=wx.DEFAULT_DIALOG_STYLE, useMetal=False):
-		super (TestDialog, self).__init__(parent, id, title, pos, size, style)
+class ConfigDialog(wx.Dialog):
+	def __init__(self, parent, id = wx.ID_ANY, title = "Test", size=wx.DefaultSize, 
+				pos=wx.DefaultPosition, style=wx.DEFAULT_DIALOG_STYLE, useMetal=False):
+		super (ConfigDialog, self).__init__(parent, id, title, pos, size, style)
 		
-		type = "Spam spam spam"
+		type = self.type = "Spam spam spam"
 		
-		self.type = wx.TextCtrl(self, value=type, style=wx.TE_READONLY)
-		self.details = wx.TextCtrl(self, value="", style=wx.TE_READONLY | wx.TE_MULTILINE)
+		self.type = wx.TextCtrl(self, value=type)
+		self.details = wx.TextCtrl(self, value="", style = wx.TE_MULTILINE)
 		# Layout
 		self.__DoLayout()
 		self.SetInitialSize()
@@ -189,10 +215,22 @@ class TestDialog(wx.Dialog):
 		# Add the details field
 		sizer.Add(detail_lbl, (2, 1))
 		sizer.Add(self.details, (2, 2), (5, 15), wx.EXPAND)
-		# Add a spacer to pad out the right side
-		sizer.Add((5, 5), (2, 17))
-		# And another to the pad out the bottom
-		sizer.Add((5, 5), (7, 0))
+		
+		# Add standard OK/Cancel buttons & Standard dialog button sizer
+		sdbs = wx.StdDialogButtonSizer()
+		ok_button = wx.Button(self, wx.ID_OK)
+		cancel_button = wx.Button(self, wx.ID_CANCEL)
+		
+		sdbs.AddButton(ok_button)
+		sdbs.AddButton(cancel_button)
+		sdbs.Realize()
+		
+		
+		
+		# Add dialog button sizer to bottom
+		
+		sizer.Add(sdbs, (8,1), (1,15), wx.ALIGN_RIGHT | wx.EXPAND | wx.ALL , 5)
+		
 		self.SetSizer(sizer)
 			
 	
