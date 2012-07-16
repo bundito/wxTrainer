@@ -135,11 +135,13 @@ class MainFrame(wx.Frame):
 			self.bpanel.SetSize(bsize)
 			self.bpanel.Show()
 			self.SetSize(bsize)
+			self.bpanel.SetFocus()
 		else:
 			self.panel.Show()
 			self.panel.SetSize(origsize)
 			self.SetSize(origsize)
 			self.bpanel.Hide()
+			self.panel.SetFocus()
 		
 
 
