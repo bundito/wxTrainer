@@ -12,9 +12,9 @@ import config as cfg
 import logging
 logging.basicConfig(level = logging.INFO)
 
-logging.info(cfg.message)
-cfg.read_cfg()
-logging.info(cfg.message)
+#logging.info(cfg.message)
+#cfg.read_cfg()
+#logging.info(cfg.message)
 #cfg.add_cfg('test')
 
 

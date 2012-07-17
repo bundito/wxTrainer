@@ -190,47 +190,41 @@ class BossPanel(wx.Panel):
         self.SetSizer(sizer)
 
 
+#===============================================================================
+# Config dialog
+#===============================================================================
 
 
 class ConfigDialog(wx.Dialog):
-	def __init__(self, parent, id = wx.ID_ANY, title = "Test", size=wx.DefaultSize, 
+	def __init__(self, parent, id = wx.ID_ANY, title = "Options", size=wx.DefaultSize, 
 				pos=wx.DefaultPosition, style=wx.DEFAULT_DIALOG_STYLE, useMetal=False):
 		super (ConfigDialog, self).__init__(parent, id, title, pos, size, style)
 		
-		type = self.type = "Spam spam spam"
+		panel = wx.Panel(self)
+		#panel.SetSize((300,300))
 		
-		self.type = wx.TextCtrl(self, value=type)
-		self.details = wx.TextCtrl(self, value="", style = wx.TE_MULTILINE)
-		# Layout
-		self.__DoLayout()
-		self.SetInitialSize()
-
-	def __DoLayout(self):
-		sizer = wx.GridBagSizer(vgap=8, hgap=8)
-		type_lbl = wx.StaticText(self, label="Type:")
-		detail_lbl = wx.StaticText(self, label="Details:")
-		# Add the event type fields
-		sizer.Add(type_lbl, (1, 1))
-		sizer.Add(self.type, (1, 2), (1, 15), wx.EXPAND)
-		# Add the details field
-		sizer.Add(detail_lbl, (2, 1))
-		sizer.Add(self.details, (2, 2), (5, 15), wx.EXPAND)
+		text = wx.StaticText(panel, -1, "Hello", style = wx.ALIGN_CENTER)
+		text2 = wx.StaticText(panel, -1, "Spam", style = wx.ALIGN_CENTER)
+		
+		cfggbs = wx.GridBagSizer(5,5)
+		
+		cfggbs.Add(text, (0,0), (1, 5), wx.ALL | wx.ALIGN_CENTER, 5)
+		cfggbs.Add(text2, (0,6), (1,1), wx.ALL | wx.ALIGN_CENTER, 5)
 		
 		# Add standard OK/Cancel buttons & Standard dialog button sizer
 		sdbs = wx.StdDialogButtonSizer()
-		ok_button = wx.Button(self, wx.ID_OK)
-		cancel_button = wx.Button(self, wx.ID_CANCEL)
+		ok_button = wx.Button(panel, wx.ID_OK)
+		cancel_button = wx.Button(panel, wx.ID_CANCEL)
 		
 		sdbs.AddButton(ok_button)
 		sdbs.AddButton(cancel_button)
 		sdbs.Realize()
 		
+		# Add dialog button set to bottom of GBS
+		cfggbs.Add(sdbs, (4,1), (1,6), wx.ALIGN_RIGHT | wx.EXPAND | wx.ALL , 5)
 		
-		
-		# Add dialog button sizer to bottom
-		
-		sizer.Add(sdbs, (8,1), (1,15), wx.ALIGN_RIGHT | wx.EXPAND | wx.ALL , 5)
-		
-		self.SetSizer(sizer)
-			
+		panel.SetSizerAndFit(cfggbs)
+		self.SetClientSize(panel.GetSize())
+
+	
 	
