@@ -201,15 +201,30 @@ class ConfigDialog(wx.Dialog):
 		super (ConfigDialog, self).__init__(parent, id, title, pos, size, style)
 		
 		panel = wx.Panel(self)
-		#panel.SetSize((300,300))
 		
-		text = wx.StaticText(panel, -1, "Hello", style = wx.ALIGN_CENTER)
-		text2 = wx.StaticText(panel, -1, "Spam", style = wx.ALIGN_CENTER)
+		
+		
+		
+		
+		ht_choices = ["A - xxxxx", "H - xxxxx", "S - xxxx", "D - xxxxx", "P - xxxxx"]
+		view_choices = ['Txt', 'Gfx']
+		input_choices = ['Kbd', 'Mse', 'Both']
+		
+		caption = wx.StaticText(panel, -1, "Caption", style = wx.ALIGN_CENTER)
+		
+		ht_box = wx.RadioBox(panel, -1, "HT", choices = ht_choices, majorDimension = 1)
+		view_box = wx.RadioBox(panel, -1, "View", choices = view_choices, majorDimension = 1)
+		input_box = wx.RadioBox(panel, -1, "Input", choices = input_choices, majorDimension = 1)
+		
+		bkey_choice = wx.TextCtrl(panel, -1, "Q", size=(125, -1))
 		
 		cfggbs = wx.GridBagSizer(5,5)
 		
-		cfggbs.Add(text, (0,0), (1, 5), wx.ALL | wx.ALIGN_CENTER, 5)
-		cfggbs.Add(text2, (0,6), (1,1), wx.ALL | wx.ALIGN_CENTER, 5)
+		cfggbs.Add(caption, (0,0), (1, 4), wx.ALL | wx.ALIGN_CENTER, 5)
+		cfggbs.Add(ht_box, (1,0), (3,2), wx.ALL, 5)
+		cfggbs.Add(view_box, (1,2), (3, 1), wx.ALL, 5)
+		cfggbs.Add(input_box, (1, 3), (2, 1), wx.ALL, 5)
+		cfggbs.Add(bkey_choice, (3,3), (1,1), wx.ALL, 5)
 		
 		# Add standard OK/Cancel buttons & Standard dialog button sizer
 		sdbs = wx.StdDialogButtonSizer()
