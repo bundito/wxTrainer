@@ -106,7 +106,7 @@ class MainFrame(wx.Frame):
 		#===============================================================================
 				
 		# Keyboard
-		self.Bind(wx.EVT_CHAR_HOOK, self.keypress)
+		self.Bind(wx.EVT_CHAR_HOOK, self.OnKey)
 		
 		# Buttons
 		self.Bind(wx.EVT_BUTTON, self.OnButton, hit_button)
@@ -131,18 +131,19 @@ class MainFrame(wx.Frame):
 	# Menu handlers are (for now) handled internally by GUI
 	#=======================================================================
 
-	def DoConfig(self, event):
-		dlg = self.cfg_dialog
-		retval = dlg.ShowModal()
-		
-#		self.cfg_dialog.Hide()
-		if retval == wx.ID_OK:
-			logging.info("Ok")
-			type = dlg.type.GetValue()
-			logging.info(type)
-			
-		elif retval == wx.ID_CANCEL:
-			logging.info("Cancelled.")
+		def DoConfig(self, event):
+			event.Skip()
+#		dlg = self.cfg_dialog
+#		retval = dlg.ShowModal()
+#		
+##		self.cfg_dialog.Hide()
+#		if retval == wx.ID_OK:
+#			logging.info("Ok")
+##			type = dlg.btype_picker.GetValue()
+##			logging.info(btype_picker)
+##			
+#		elif retval == wx.ID_CANCEL:
+#			logging.info("Cancelled.")
 			
 			
 	#===========================================================================
@@ -202,31 +203,53 @@ class ConfigDialog(wx.Dialog):
 		
 		panel = wx.Panel(self)
 		
-		
-		
-		
+		#=======================================================================
+		# Config (main) items...
+		#=======================================================================
 		
 		ht_choices = ["A - xxxxx", "H - xxxxx", "S - xxxx", "D - xxxxx", "P - xxxxx"]
+		ht_box = self.ht_box = wx.RadioBox(panel, -1, "HT", choices = ht_choices, majorDimension = 1)
+		
 		view_choices = ['Txt', 'Gfx']
-		input_choices = ['Kbd', 'Mse', 'Both']
-		
-		caption = wx.StaticText(panel, -1, "Caption", style = wx.ALIGN_CENTER)
-		
-		ht_box = wx.RadioBox(panel, -1, "HT", choices = ht_choices, majorDimension = 1)
 		view_box = wx.RadioBox(panel, -1, "View", choices = view_choices, majorDimension = 1)
-		input_box = wx.RadioBox(panel, -1, "Input", choices = input_choices, majorDimension = 1)
 		
-		bkey_choice = wx.TextCtrl(panel, -1, "Q", size=(125, -1))
+		bkey_label = wx.StaticText(panel, -1, "Bkey")		
+		bkey_choice = self.bkey_choice = wx.TextCtrl(panel, -1, "Q", size=(125, -1))
 		
-		cfggbs = wx.GridBagSizer(5,5)
+		btype_label = wx.StaticText(panel, -1, "BK Type")
+		btype_choices = ['Grid', 'Image', 'Hide']
+		btype_picker = self.btype_picker = wx.Choice(panel, -1, choices = btype_choices)
+		btype_picker.SetSelection(0)
 		
-		cfggbs.Add(caption, (0,0), (1, 4), wx.ALL | wx.ALIGN_CENTER, 5)
-		cfggbs.Add(ht_box, (1,0), (3,2), wx.ALL, 5)
-		cfggbs.Add(view_box, (1,2), (3, 1), wx.ALL, 5)
-		cfggbs.Add(input_box, (1, 3), (2, 1), wx.ALL, 5)
-		cfggbs.Add(bkey_choice, (3,3), (1,1), wx.ALL, 5)
+		btn_msg = wx.StaticText(panel, -1, "Disable Invalid Buttons?")
+		btn_msg.Wrap(150)
+		btn_yes = self.btn_yes = wx.RadioButton(panel, -1, "Yes", style = wx.RB_GROUP)
+		btn_no = self.btn_no = wx.RadioButton(panel, -1, "No")
+		btn_hint = wx.StaticText(panel, -1, "Lorem ipsum dolor sit amet amet lorem ipsum dolor sit ametamet lorem ipsum dolor sit amet.")
+		btn_hint.Wrap(150)
+	
+		#=======================================================================
+		# Create GBS, add items
+		#=======================================================================
 		
-		# Add standard OK/Cancel buttons & Standard dialog button sizer
+		cfg_gbs = wx.GridBagSizer(5,5)
+		
+		cfg_gbs.Add(ht_box, (0,0), (3,2), wx.ALL|wx.EXPAND|wx.ALIGN_CENTER, 5)
+		cfg_gbs.Add(view_box, (0,2), (3, 2), wx.ALL|wx.EXPAND|wx.CENTER, 5)
+		
+		cfg_gbs.Add(bkey_label, (3, 2))
+		cfg_gbs.Add(bkey_choice, (3, 3))
+		
+		cfg_gbs.Add(btype_label, (4,2))
+		cfg_gbs.Add(btype_picker, (4,3))
+		
+		cfg_gbs.Add(btn_msg, (3,0), (1,1), wx.EXPAND|wx.ALL, 5)
+		cfg_gbs.Add(btn_yes, (4,0), (1,1), wx.LEFT, 35)
+		cfg_gbs.Add(btn_no, (5,0), (1,1), wx.LEFT, 35)
+		cfg_gbs.Add(btn_hint, (6,0), (2,2), wx.EXPAND|wx.ALL, 5)
+		
+		
+#		Add standard OK/Cancel buttons using Standard Dialog Button sizer
 		sdbs = wx.StdDialogButtonSizer()
 		ok_button = wx.Button(panel, wx.ID_OK)
 		cancel_button = wx.Button(panel, wx.ID_CANCEL)
@@ -235,11 +258,9 @@ class ConfigDialog(wx.Dialog):
 		sdbs.AddButton(cancel_button)
 		sdbs.Realize()
 		
-		# Add dialog button set to bottom of GBS
-		cfggbs.Add(sdbs, (4,1), (1,6), wx.ALIGN_RIGHT | wx.EXPAND | wx.ALL , 5)
+#		Add dialog button set to bottom of GBS
+		cfg_gbs.Add(sdbs, (8,1), (1,4), wx.ALIGN_RIGHT | wx.EXPAND | wx.ALL , 5)
 		
-		panel.SetSizerAndFit(cfggbs)
+		panel.SetSizerAndFit(cfg_gbs)
 		self.SetClientSize(panel.GetSize())
-
-	
 	

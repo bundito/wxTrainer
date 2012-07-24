@@ -7,32 +7,42 @@ x game logic added and working [7/6]
 x filter which keys are allowed (lookup EVT_CHAR_HOOK) [7/09 - must be in code]
 x fix gridbagsizer layout - way ugly
 x enlarge size of window? resizable?
-/ menu (added, needs populating) [7/5]
-	> open config dialog
-	> display colored grid/chart (non-modal, resizable?)
-/ boss key (display new panel?) [7/10]
-	x un-boss [7/10]
-	> display for boss panel - ?
-	> immediate quit
 
 
 [NEXT]
+- apply cfg settings to mainapp
+	> htype
+	> button disable
+	
 - right/wrong message (statusbar?)
-- choose hand type (radio buttons/checkboxes? cfg file?)
-- multiple YML files (h/s 17's)
 - flash buttons red/green for right/wrong
 - timer for card appearances?
 - wx Table/grid display to show YML file
-- config file
-	> immediate redeal on/off (space otherwise?)
-	> dlr stands on hard or soft 17s (see below)
+	> button?
+	> menu item?
+	
+- menu: config (main-opts)
+	x choose htype
+	/ choose disabling of buttons
+	> choose boss key 
 	> text or img version
 		> multiple card sets/backs
 	> background color (wx.ColorPicker or whatever)
-	> buttons/keys/both
-	> choose boss key 
 	> text-version font
+	> immediate redeal on/off (space otherwise?)
+	x buttons/keys/both [removed; stupid]
 
+-menu: config (strat)
+	> decks (YML pt1)
+	> H/S 17 (YML pt2)
+	> SUR allowed
+	> RSA allowed
+	> DAS allowed
+	
+/ boss key (display new panel?) [7/10]
+	x un-boss [7/10]
+	/ display for boss panel [grid now, options coming (7/24)]
+	> immediate quit
 
 [BIG]
 - stat tracking

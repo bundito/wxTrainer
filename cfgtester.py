@@ -1,16 +1,27 @@
-import config as cfg
+import config
+from config import options
 
-import logging
-logging.basicConfig(level = logging.INFO)
+#print options
 
-opts = cfg.options
-print opts
+# options.set('main-opts', 'htype', 'spam')
 
-cfg.set_option('message', 'eggs')
+#
+#config.save_options()
 
-opts = cfg.options
+htype = options.get('main-opts', 'htype')
+print htype
 
-print opts
+#import logging
+#logging.basicConfig(level = logging.INFO)
+#
+#opts = cfg.options
+#print opts
+#
+#cfg.set_option('message', 'eggs')
+#
+#opts = cfg.options
+#
+#print opts
 
 #print cfg.opts_dict['message']
 #print cfg.opts_dict['htype']

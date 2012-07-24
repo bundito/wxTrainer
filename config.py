@@ -2,21 +2,23 @@ import ConfigParser
 import logging
 
 CFG_FILE = './wxTrainer.cfg'
-CFG_SECTION = 'sample-cfg'
+CFG_SECTION = 'main-opts'
+
+options = ConfigParser.SafeConfigParser()
+options.read(CFG_FILE)
+
+
 
 #===============================================================================
 # Convenience functions
 #===============================================================================
 
-def save_optns():
+def save_options():
 	with open(CFG_FILE, 'wb') as cfile:
-		cp.write(cfile)
+		options.write(cfile)
+
 
 def set_option(option, value):
-	cp.set(CFG_SECTION, option, value)
+	options.set(CFG_SECTION, option, value)
+	
 
-
-cp = ConfigParser.SafeConfigParser()
-cp.read(CFG_FILE)
-
-options = cp.items(CFG_SECTION)

@@ -7,16 +7,13 @@ import wx
 import gui
 import cards
 import strategy
-import config as cfg
+import config
+from config import options
 
 import logging
 logging.basicConfig(level = logging.INFO)
 
-#logging.info(cfg.message)
-#cfg.read_cfg()
-#logging.info(cfg.message)
-#cfg.add_cfg('test')
-
+logging.info("htype read as %s" % options.get('main-opts', 'htype'))
 
 # Yeah... this sucks. There must be a better way of handling buttons
 play_ids = dict({1000: "H", 2000: "S", 3000: "D", 4000: "S"})
@@ -34,8 +31,21 @@ class mf(gui.MainFrame):
 		
 	def OnButton(self, event):
 		self.CheckPlay(play_ids[event.Id])
-	
-	def keypress(self, event):
+		
+	def DoConfig(self, event):
+		dlg = self.cfg_dialog
+		retval = dlg.ShowModal()
+		
+		if retval == wx.ID_OK:
+			logging.info("Ok")
+			options.set('main-opts', 'htype', dlg.ht_box.StringSelection)
+			
+			config.save_options()
+		
+		elif retval == wx.ID_CANCEL:
+			logging.info("Cancelled.")
+
+	def OnKey(self, event):
 		logging.debug("OnKey triggered in mainapp")
 		keycode = event.GetKeyCode()
 		if keycode <= 256:
