@@ -39,6 +39,11 @@ class mf(gui.MainFrame):
 		if retval == wx.ID_OK:
 			logging.info("Ok")
 			options.set('main-opts', 'htype', dlg.ht_box.StringSelection)
+			options.set('main-opts', 'view', dlg.view_box.StringSelection)
+			options.set('main-opts', 'bkey', dlg.bkey_choice.Value)
+			options.set('main-opts', 'bk_type', dlg.btype_picker.StringSelection)
+			btn_disable = dlg.btn_disable.IsChecked()
+			options.set('main-opts', 'btn_disable', str(dlg.btn_disable.IsChecked()))
 			
 			config.save_options()
 		

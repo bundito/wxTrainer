@@ -7,6 +7,9 @@ Created on Jun 20, 2012
 import wx
 import wx.grid as gridlib
 
+import config
+from config import options
+
 import logging
 
 
@@ -127,24 +130,9 @@ class MainFrame(wx.Frame):
 		def OnKey(self, event):
 			event.Skip()
 	
-	#=======================================================================
-	# Menu handlers are (for now) handled internally by GUI
-	#=======================================================================
-
 		def DoConfig(self, event):
 			event.Skip()
-#		dlg = self.cfg_dialog
-#		retval = dlg.ShowModal()
-#		
-##		self.cfg_dialog.Hide()
-#		if retval == wx.ID_OK:
-#			logging.info("Ok")
-##			type = dlg.btype_picker.GetValue()
-##			logging.info(btype_picker)
-##			
-#		elif retval == wx.ID_CANCEL:
-#			logging.info("Cancelled.")
-			
+
 			
 	#===========================================================================
 	# Object methods belong at THIS outdent level 
@@ -206,27 +194,33 @@ class ConfigDialog(wx.Dialog):
 		#=======================================================================
 		# Config (main) items...
 		#=======================================================================
-		
+	
+		ht_pref = options.get('main-opts', 'htype')	
 		ht_choices = ["A - xxxxx", "H - xxxxx", "S - xxxx", "D - xxxxx", "P - xxxxx"]
 		ht_box = self.ht_box = wx.RadioBox(panel, -1, "HT", choices = ht_choices, majorDimension = 1)
+		ht_box.SetStringSelection(ht_pref)
 		
 		view_choices = ['Txt', 'Gfx']
-		view_box = wx.RadioBox(panel, -1, "View", choices = view_choices, majorDimension = 1)
+		view_box = self.view_box = wx.RadioBox(panel, -1, "View", choices = view_choices, majorDimension = 1)
+		view_box.SetStringSelection(options.get('main-opts', 'view'))
 		
 		bkey_label = wx.StaticText(panel, -1, "Bkey")		
-		bkey_choice = self.bkey_choice = wx.TextCtrl(panel, -1, "Q", size=(125, -1))
+		bkey_pref = options.get('main-opts', 'bkey')
+		bkey_choice = self.bkey_choice = wx.TextCtrl(panel, -1, bkey_pref, size=(125, -1))
 		
 		btype_label = wx.StaticText(panel, -1, "BK Type")
 		btype_choices = ['Grid', 'Image', 'Hide']
 		btype_picker = self.btype_picker = wx.Choice(panel, -1, choices = btype_choices)
-		btype_picker.SetSelection(0)
+		btype_picker.SetStringSelection(options.get('main-opts', 'bk_type'))
 		
-		btn_msg = wx.StaticText(panel, -1, "Disable Invalid Buttons?")
-		btn_msg.Wrap(150)
-		btn_yes = self.btn_yes = wx.RadioButton(panel, -1, "Yes", style = wx.RB_GROUP)
-		btn_no = self.btn_no = wx.RadioButton(panel, -1, "No")
+		disable_pref = options.getboolean('main-opts', 'btn_disable')
+		logging.info(disable_pref)
+		btn_disable = self.btn_disable = wx.CheckBox(panel, -1, "Disable Invalid Buttons")
+		btn_disable.SetValue(disable_pref)
 		btn_hint = wx.StaticText(panel, -1, "Lorem ipsum dolor sit amet amet lorem ipsum dolor sit ametamet lorem ipsum dolor sit amet.")
 		btn_hint.Wrap(150)
+	
+		
 	
 		#=======================================================================
 		# Create GBS, add items
@@ -243,9 +237,7 @@ class ConfigDialog(wx.Dialog):
 		cfg_gbs.Add(btype_label, (4,2))
 		cfg_gbs.Add(btype_picker, (4,3))
 		
-		cfg_gbs.Add(btn_msg, (3,0), (1,1), wx.EXPAND|wx.ALL, 5)
-		cfg_gbs.Add(btn_yes, (4,0), (1,1), wx.LEFT, 35)
-		cfg_gbs.Add(btn_no, (5,0), (1,1), wx.LEFT, 35)
+		cfg_gbs.Add(btn_disable, (4,0), (1, 2), wx.EXPAND|wx.ALL, 5)
 		cfg_gbs.Add(btn_hint, (6,0), (2,2), wx.EXPAND|wx.ALL, 5)
 		
 		
