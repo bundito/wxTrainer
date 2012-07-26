@@ -196,7 +196,7 @@ class ConfigDialog(wx.Dialog):
 		#=======================================================================
 	
 		ht_pref = options.get('main-opts', 'htype')	
-		ht_choices = ["A - xxxxx", "H - xxxxx", "S - xxxx", "D - xxxxx", "P - xxxxx"]
+		ht_choices = ["A - xxxxx", "H - xxxxx", "S - xxxxx", "P - xxxxx"]
 		ht_box = self.ht_box = wx.RadioBox(panel, -1, "HT", choices = ht_choices, majorDimension = 1)
 		ht_box.SetStringSelection(ht_pref)
 		
@@ -207,6 +207,9 @@ class ConfigDialog(wx.Dialog):
 		bkey_label = wx.StaticText(panel, -1, "Bkey")		
 		bkey_pref = options.get('main-opts', 'bkey')
 		bkey_choice = self.bkey_choice = wx.TextCtrl(panel, -1, bkey_pref, size=(125, -1))
+		bkey_choice.SetMaxLength(1)
+#		bkey_choice.SetInsertionPoint(0)
+		bkey_choice.SelectAll()
 		
 		btype_label = wx.StaticText(panel, -1, "BK Type")
 		btype_choices = ['Grid', 'Image', 'Hide']
@@ -214,7 +217,7 @@ class ConfigDialog(wx.Dialog):
 		btype_picker.SetStringSelection(options.get('main-opts', 'bk_type'))
 		
 		disable_pref = options.getboolean('main-opts', 'btn_disable')
-		logging.info(disable_pref)
+#		logging.info(disable_pref)
 		btn_disable = self.btn_disable = wx.CheckBox(panel, -1, "Disable Invalid Buttons")
 		btn_disable.SetValue(disable_pref)
 		btn_hint = wx.StaticText(panel, -1, "Lorem ipsum dolor sit amet amet lorem ipsum dolor sit ametamet lorem ipsum dolor sit amet.")
@@ -255,4 +258,42 @@ class ConfigDialog(wx.Dialog):
 		
 		panel.SetSizerAndFit(cfg_gbs)
 		self.SetClientSize(panel.GetSize())
+		
+		#=======================================================================
+		# Event handlers
+		#=======================================================================
 	
+#		self.Bind(wx.EVT_TEXT, self.OnBkeyChange, bkey_choice)
+		
+		# Must specifically bind Focus events directly to the objects involved
+		# or the trigger will not propagate up the chain of command.
+		self.bkey_choice.Bind(wx.EVT_SET_FOCUS, self.ClickBkey, bkey_choice)
+		
+		#self.Bind(wx.EVT_TEXT, self.EvtText, bkey_choice)
+		#bkey_choice.Bind(wx.EVT_CHAR, self.EvtChar)
+		
+	
+	def ClickBkey(self, event):
+		wx.CallAfter(self.SelectAll)
+		logging.info("in clickbkey")
+		
+		
+	def SelectAll(self):
+		logging.info("in select-all")
+		self.bkey_choice.SelectAll()
+		#logging.info(self.bkey_choice.Value)
+		#logging.info(self.bkey_choice.GetSelection())
+		
+		
+	def OnBkeyChange(self, event):
+		val = event.GetString()
+		logging.info(val)
+		#self.bkey_choice.SetValue(val.upper)
+		
+	def EvtText(self, event):
+		logging.info('EvtText: %s\n' % event.GetString())
+	
+	def EvtChar(self, event):
+		logging.info('EvtChar: %d\n' % event.GetKeyCode())
+		event.Skip()
+			

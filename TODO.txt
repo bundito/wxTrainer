@@ -7,13 +7,14 @@ x game logic added and working [7/6]
 x filter which keys are allowed (lookup EVT_CHAR_HOOK) [7/09 - must be in code]
 x fix gridbagsizer layout - way ugly
 x enlarge size of window? resizable?
+x apply cfg settings to mainapp
+	x htype
+	x button disable
 
 
-[NEXT]
-- apply cfg settings to mainapp
-	> htype
-	> button disable
 	
+[NEXT]
+- filter keypresses
 - right/wrong message (statusbar?)
 - flash buttons red/green for right/wrong
 - timer for card appearances?
@@ -23,9 +24,14 @@ x enlarge size of window? resizable?
 	
 - menu: config (main-opts)
 	x choose htype
-	/ choose disabling of buttons
-	> choose boss key 
-	> text or img version
+	x choose disabling of buttons
+	/ choose boss key
+		> event handler:
+		  - one character
+		  - force to uppercase
+		  - no HSDP allowed
+		   
+	/ text or img version
 		> multiple card sets/backs
 	> background color (wx.ColorPicker or whatever)
 	> text-version font

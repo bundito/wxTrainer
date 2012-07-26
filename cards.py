@@ -61,16 +61,10 @@ class playerhand():
 	Generate a player's hand from 2 cards
 	'''
 		
-	def __init__(self, handtype = "all"):
+	def __init__(self, handtype):
 
 		tests = 0
-		
-		if handtype == "all":
-			types = ('soft', 'hard', 'split')
-			handtype = random.choice(types)		
-		
-			logging.debug("Hand: %s" % handtype)
-		
+			
 		if handtype == "soft":
 			c1 = self.c1 = newcard("A")
 			c2 = self.c2 = newcard(SOFT)
