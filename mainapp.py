@@ -19,6 +19,8 @@ htype = options.get('main-opts', 'htype')
 # Yeah... this sucks. There must be a better way of handling buttons
 play_ids = dict({1000: "H", 2000: "S", 3000: "D", 4000: "S"})
 
+
+
 # More temporary ugliness...
 htypes = dict({'A - xxxxx': 'all', 'H - xxxxx': 'hard', 'S - xxxxx' : 'soft', 'P - xxxxx': 'split'})
 
@@ -31,10 +33,10 @@ class mf(gui.MainFrame):
 		self.handtype = htypes[htype]	
 		self.deal()
 	
-	
 		
 	def OnButton(self, event):
 		self.CheckPlay(play_ids[event.Id])
+	
 		
 	def DoConfig(self, event):
 		dlg = self.cfg_dialog
@@ -43,7 +45,7 @@ class mf(gui.MainFrame):
 		if retval == wx.ID_OK:					
 			options.set('main-opts', 'htype', dlg.ht_box.StringSelection)
 			options.set('main-opts', 'view', dlg.view_box.StringSelection)
-			options.set('main-opts', 'bkey', dlg.bkey_choice.Value)
+			options.set('main-opts', 'bkey', dlg.bkey_choice.StringSelection)
 			options.set('main-opts', 'bk_type', dlg.btype_picker.StringSelection)
 			btn_disable = dlg.btn_disable.IsChecked()
 			options.set('main-opts', 'btn_disable', str(dlg.btn_disable.IsChecked()))
@@ -57,28 +59,35 @@ class mf(gui.MainFrame):
 		elif retval == wx.ID_CANCEL:
 			logging.info("Cancelled.")
 
+
 	def OnKey(self, event):
-		logging.debug("OnKey triggered in mainapp")
-		keycode = event.GetKeyCode()
-		if keycode <= 256:
-			key = chr(keycode)
+		
+		bkey = options.get('main-opts', 'bkey')
+		
+		keypress = event.GetKeyCode()
+		
+		valid_keys = list('HSDP')
+		valid_keys.append(bkey)
+		
+		keylist = list()
+		for key in valid_keys:
+			keylist.append(ord(key))
 			
-			if key != "Q":
-				self.CheckPlay(key)
-			else:
+		if keypress in keylist:
+			if keypress == ord(bkey):
 				self.SwapView()
+			else:
+				self.CheckPlay(chr(keypress))
+				 
+	
 
 	def deal(self):
-#		logging.info('deal() thinks handtype is %s' % self.handtype)
 
 		self.handtype = htypes[htype]
 
 		if self.handtype == "all":
 			types = ('soft', 'hard', 'split')
 			self.handtype = random.choice(types)		
-		
-#			logging.debug("Hand: %s" % handtype)
-
 
 		h = cards.playerhand(self.handtype)
 		d = cards.dealercard()

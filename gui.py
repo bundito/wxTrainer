@@ -206,10 +206,9 @@ class ConfigDialog(wx.Dialog):
 		
 		bkey_label = wx.StaticText(panel, -1, "Bkey")		
 		bkey_pref = options.get('main-opts', 'bkey')
-		bkey_choice = self.bkey_choice = wx.TextCtrl(panel, -1, bkey_pref, size=(125, -1))
-		bkey_choice.SetMaxLength(1)
-#		bkey_choice.SetInsertionPoint(0)
-		bkey_choice.SelectAll()
+		bkey_letters = list('ABCEFGIJKLMNOQRTUVWXYZ')
+		bkey_choice = self.bkey_choice = wx.Choice(panel, -1, choices = bkey_letters)
+		bkey_choice.SetStringSelection(bkey_pref)
 		
 		btype_label = wx.StaticText(panel, -1, "BK Type")
 		btype_choices = ['Grid', 'Image', 'Hide']
@@ -263,37 +262,3 @@ class ConfigDialog(wx.Dialog):
 		# Event handlers
 		#=======================================================================
 	
-#		self.Bind(wx.EVT_TEXT, self.OnBkeyChange, bkey_choice)
-		
-		# Must specifically bind Focus events directly to the objects involved
-		# or the trigger will not propagate up the chain of command.
-		self.bkey_choice.Bind(wx.EVT_SET_FOCUS, self.ClickBkey, bkey_choice)
-		
-		#self.Bind(wx.EVT_TEXT, self.EvtText, bkey_choice)
-		#bkey_choice.Bind(wx.EVT_CHAR, self.EvtChar)
-		
-	
-	def ClickBkey(self, event):
-		wx.CallAfter(self.SelectAll)
-		logging.info("in clickbkey")
-		
-		
-	def SelectAll(self):
-		logging.info("in select-all")
-		self.bkey_choice.SelectAll()
-		#logging.info(self.bkey_choice.Value)
-		#logging.info(self.bkey_choice.GetSelection())
-		
-		
-	def OnBkeyChange(self, event):
-		val = event.GetString()
-		logging.info(val)
-		#self.bkey_choice.SetValue(val.upper)
-		
-	def EvtText(self, event):
-		logging.info('EvtText: %s\n' % event.GetString())
-	
-	def EvtChar(self, event):
-		logging.info('EvtChar: %d\n' % event.GetKeyCode())
-		event.Skip()
-			
