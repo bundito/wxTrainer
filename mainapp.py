@@ -27,130 +27,130 @@ htypes = dict({'A - xxxxx': 'all', 'H - xxxxx': 'hard', 'S - xxxxx' : 'soft', 'P
 chart = strategy.table()
 
 class mf(gui.MainFrame):
-	def __init__(self, parent):
-		gui.MainFrame.__init__(self, parent)
+    def __init__(self, parent):
+        gui.MainFrame.__init__(self, parent)
 
-		self.handtype = htypes[htype]
-		self.deal()
-
-
-	def OnButton(self, event):
-		self.CheckPlay(play_ids[event.Id])
+        self.handtype = htypes[htype]
+        self.deal()
 
 
-	def DoConfig(self, event):
-		dlg = self.cfg_dialog
-		retval = dlg.ShowModal()
-
-		if retval == wx.ID_OK:
-			options.set('main-opts', 'htype', dlg.ht_box.StringSelection)
-			options.set('main-opts', 'view', dlg.view_box.StringSelection)
-			options.set('main-opts', 'bkey', dlg.bkey_choice.StringSelection)
-			options.set('main-opts', 'bk_type', dlg.btype_picker.StringSelection)
-			btn_disable = dlg.btn_disable.IsChecked()
-			options.set('main-opts', 'btn_disable', str(dlg.btn_disable.IsChecked()))
-
-			config.save_options()
-
-			self.handtype = htypes[dlg.ht_box.StringSelection]
-			self.ButtonDisable(0)
-			self.deal()
-
-		elif retval == wx.ID_CANCEL:
-			logging.info("Cancelled.")
+    def OnButton(self, event):
+        self.CheckPlay(play_ids[event.Id])
 
 
-	def OnKey(self, event):
+    def DoConfig(self, event):
+        dlg = self.cfg_dialog
+        retval = dlg.ShowModal()
 
-		bkey = options.get('main-opts', 'bkey')
+        if retval == wx.ID_OK:
+            options.set('main-opts', 'htype', dlg.ht_box.StringSelection)
+            options.set('main-opts', 'view', dlg.view_box.StringSelection)
+            options.set('main-opts', 'bkey', dlg.bkey_choice.StringSelection)
+            options.set('main-opts', 'bk_type', dlg.btype_picker.StringSelection)
+#            btn_disable = dlg.btn_disable.IsChecked()
+            options.set('main-opts', 'btn_disable', str(dlg.btn_disable.IsChecked()))
 
-		keypress = event.GetKeyCode()
+            config.save_options()
 
-		valid_keys = list('HSDP')
-		valid_keys.append(bkey)
+            self.handtype = htypes[dlg.ht_box.StringSelection]
+            self.ButtonDisable(0)
+            self.deal()
 
-		keylist = list()
-		for key in valid_keys:
-			keylist.append(ord(key))
-
-		if keypress in keylist:
-			if keypress == ord(bkey):
-				self.SwapView()
-			else:
-				self.CheckPlay(chr(keypress))
+        elif retval == wx.ID_CANCEL:
+            logging.info("Cancelled.")
 
 
+    def OnKey(self, event):
 
-	def deal(self):
+        bkey = options.get('main-opts', 'bkey')
 
-		self.handtype = htypes[htype]
+        keypress = event.GetKeyCode()
 
-		if self.handtype == "all":
-			types = ('soft', 'hard', 'split')
-			self.handtype = random.choice(types)
+        valid_keys = list('HSDP')
+        valid_keys.append(bkey)
 
-		h = cards.playerhand(self.handtype)
-		d = cards.dealercard()
-		c1 = h.c1.display
-		c2 = h.c2.display
+        keylist = list()
+        for key in valid_keys:
+            keylist.append(ord(key))
 
-		logging.info("Value is %s" % h.lookup)
-
-		self.correct = chart.get_correct(h.lookup, d.value)
-
-		logging.debug("%s %s" % (c1, c2))
-
-		self.dcard.SetLabel(d.display)
-		self.pcard1.SetLabel(c1)
-		self.pcard2.SetLabel(c2)
-
-		if options.getboolean('main-opts', 'btn_disable'):
-			self.ButtonDisable(h.lookup)
+        if keypress in keylist:
+            if keypress == ord(bkey):
+                self.SwapView()
+            else:
+                self.CheckPlay(chr(keypress))
 
 
 
-	def CheckPlay(self, play):
-		logging.info("Button: %s" % play)
-		if play == self.correct:
-			logging.info("Right.")
-		else:
-			logging.info("Wrong.")
+    def deal(self):
 
-		self.deal()
+        self.handtype = htypes[htype]
+
+        if self.handtype == "all":
+            types = ('soft', 'hard', 'split')
+            self.handtype = random.choice(types)
+
+        h = cards.playerhand(self.handtype)
+        d = cards.dealercard()
+        c1 = h.c1.display
+        c2 = h.c2.display
+
+        logging.info("Value is %s", h.lookup)
+
+        self.correct = chart.get_correct(h.lookup, d.value)
+
+        logging.debug("%s %s" , c1, c2)
+
+        self.dcard.SetLabel(d.display)
+        self.pcard1.SetLabel(c1)
+        self.pcard2.SetLabel(c2)
+
+        if options.getboolean('main-opts', 'btn_disable'):
+            self.ButtonDisable(h.lookup)
 
 
 
-	def ButtonDisable(self, value):
+    def CheckPlay(self, play):
+        logging.info("Button: %s", play)
+        if play == self.correct:
+            logging.info("Right.")
+        else:
+            logging.info("Wrong.")
 
-		self.spt_button.Enable()
-		self.dbl_button.Enable()
+        self.deal()
 
-		if self.handtype == "hard":
-			self.spt_button.Disable()
 
-			if value not in ('8', '9', '10', '11'):
-				self.dbl_button.Disable()
-			else:
-				self.dbl_button.Enable()
 
-			return
+    def ButtonDisable(self, value):
 
-		elif self.handtype == "soft":
-			self.spt_button.Disable()
+        self.spt_button.Enable()
+        self.dbl_button.Enable()
+
+        if self.handtype == "hard":
+            self.spt_button.Disable()
+
+            if value not in ('8', '9', '10', '11'):
+                self.dbl_button.Disable()
+            else:
+                self.dbl_button.Enable()
+
+            return
+
+        elif self.handtype == "soft":
+            self.spt_button.Disable()
 
 
 
 
 
 class MyApp(wx.App):
-	def OnInit(self):
-		self.frame = mf(None)
-		self.SetTopWindow(self.frame)
-		self.frame.Show()
+    def OnInit(self):
+        self.frame = mf(None)
+        self.SetTopWindow(self.frame)
+        self.frame.Show()
 
-		return True
+        return True
 
 
 if __name__ == "__main__":
-	app = MyApp(False)
-	app.MainLoop()
+    app = MyApp(False)
+    app.MainLoop()
