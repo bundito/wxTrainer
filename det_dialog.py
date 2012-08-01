@@ -18,7 +18,7 @@ class DetailsDialog(wx.Dialog):
 		self.type = wx.TextCtrl(self, value=type,
 		style=wx.TE_READONLY)
 		self.details = wx.TextCtrl(self, value="",
-		style=wx.TE_READONLY | 
+		style=wx.TE_READONLY |
 		wx.TE_MULTILINE)
 		# Layout
 		self.__DoLayout()
