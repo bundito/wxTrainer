@@ -21,22 +21,51 @@ class MyFrame1 (wx.Frame):
 
 		self.SetSizeHintsSz(wx.Size(400, 200), wx.Size(500, 500))
 
+		panel = wx.Panel(self)
+
 		gbSizer2 = wx.GridBagSizer(5, 5)
-		gbSizer2.AddGrowableCol(0)
-		gbSizer2.AddGrowableCol(1)
-		gbSizer2.AddGrowableCol(2)
-		gbSizer2.AddGrowableCol(3)
-		gbSizer2.AddGrowableCol(4)
-		gbSizer2.AddGrowableRow(0)
-		gbSizer2.AddGrowableRow(1)
-		gbSizer2.AddGrowableRow(2)
-		gbSizer2.AddGrowableRow(3)
-		gbSizer2.AddGrowableRow(4)
+#		gbSizer2.AddGrowableCol(0)
+#		gbSizer2.AddGrowableCol(1)
+#		gbSizer2.AddGrowableCol(2)
+#		gbSizer2.AddGrowableCol(3)
+#		gbSizer2.AddGrowableCol(4)
+#		gbSizer2.AddGrowableRow(0)
+#		gbSizer2.AddGrowableRow(1)
+#		gbSizer2.AddGrowableRow(2)
+#		gbSizer2.AddGrowableRow(3)
+#		gbSizer2.AddGrowableRow(4)
 		gbSizer2.SetFlexibleDirection(wx.BOTH)
 		gbSizer2.SetNonFlexibleGrowMode(wx.FLEX_GROWMODE_SPECIFIED)
 		gbSizer2.SetEmptyCellSize(wx.Size(5, 5))
 
 		gbSizer2.SetMinSize(wx.Size(5, 5))
+
+
+		#=======================================================================
+		# 
+		#=======================================================================
+
+		imgfile = "./clipping-grid.png"
+
+		gridimage = wx.Image(imgfile, wx.BITMAP_TYPE_ANY)
+		bmp = wx.StaticBitmap(panel, -1, gridimage.ConvertToBitmap())
+
+		colwidth = 80
+		rowheight = 120
+		col = 2
+		row = 1
+
+		cell = wx.Rect(colwidth * col, rowheight * row, colwidth, rowheight)
+
+		print cell
+
+		subimg = gridimage.GetSubImage(cell)
+		subbmp = wx.StaticBitmap(panel, -1, subimg.ConvertToBitmap())
+
+		gbSizer2.Add(bmp, (2, 0))
+		gbSizer2.Add(subbmp, (2, 1))
+
+
 		self.m_staticText5 = wx.StaticText(self, wx.ID_ANY, u"MyLabel", wx.DefaultPosition, wx.DefaultSize, wx.ALIGN_CENTRE)
 		self.m_staticText5.Wrap(-1)
 		self.m_staticText5.SetFont(wx.Font(wx.NORMAL_FONT.GetPointSize(), 70, 90, 92, False, wx.EmptyString))
@@ -51,20 +80,26 @@ class MyFrame1 (wx.Frame):
 		self.m_staticText7.Wrap(-1)
 		gbSizer2.Add(self.m_staticText7, wx.GBPosition(1, 2), wx.GBSpan(1, 2), wx.ALIGN_CENTER | wx.ALL, 5)
 
-		self.m_button5 = wx.Button(self, wx.ID_ANY, u"MyButton", wx.DefaultPosition, wx.DefaultSize, 0)
-		gbSizer2.Add(self.m_button5, wx.GBPosition(2, 0), wx.GBSpan(1, 1), wx.ALL, 5)
+#		self.m_button5 = wx.Button(self, wx.ID_ANY, u"MyButton", wx.DefaultPosition, wx.DefaultSize, 0)
+#		gbSizer2.Add(self.m_button5, wx.GBPosition(2, 0), wx.GBSpan(1, 1), wx.ALL, 5)
+#
+#		self.m_button6 = wx.Button(self, wx.ID_ANY, u"MyButton", wx.DefaultPosition, wx.DefaultSize, 0)
+#		gbSizer2.Add(self.m_button6, wx.GBPosition(2, 1), wx.GBSpan(1, 1), wx.ALL, 5)
+#
+#		self.m_button7 = wx.Button(self, wx.ID_ANY, u"MyButton", wx.DefaultPosition, wx.DefaultSize, 0)
+#		gbSizer2.Add(self.m_button7, wx.GBPosition(2, 2), wx.GBSpan(1, 1), wx.ALL, 5)
+#
+#		self.m_button8 = wx.Button(self, wx.ID_ANY, u"MyButton", wx.DefaultPosition, wx.DefaultSize, 0)
+#		gbSizer2.Add(self.m_button8, wx.GBPosition(2, 3), wx.GBSpan(1, 1), wx.ALL, 5)
 
-		self.m_button6 = wx.Button(self, wx.ID_ANY, u"MyButton", wx.DefaultPosition, wx.DefaultSize, 0)
-		gbSizer2.Add(self.m_button6, wx.GBPosition(2, 1), wx.GBSpan(1, 1), wx.ALL, 5)
-
-		self.m_button7 = wx.Button(self, wx.ID_ANY, u"MyButton", wx.DefaultPosition, wx.DefaultSize, 0)
-		gbSizer2.Add(self.m_button7, wx.GBPosition(2, 2), wx.GBSpan(1, 1), wx.ALL, 5)
-
-		self.m_button8 = wx.Button(self, wx.ID_ANY, u"MyButton", wx.DefaultPosition, wx.DefaultSize, 0)
-		gbSizer2.Add(self.m_button8, wx.GBPosition(2, 3), wx.GBSpan(1, 1), wx.ALL, 5)
-
-		self.SetSizer(gbSizer2)
+		panel.SetSizerAndFit(gbSizer2)
+		self.SetClientSize(panel.GetSize())
 		self.Layout()
+
+
+
+#		self.SetSizer(gbSizer2)
+#		self.Layout()
 		self.m_menubar2 = wx.MenuBar(0)
 		self.m_menu2 = wx.Menu()
 		self.m_menuItem1 = wx.MenuItem(self.m_menu2, wx.ID_ANY, u"MyMenuItem", wx.EmptyString, wx.ITEM_NORMAL)
